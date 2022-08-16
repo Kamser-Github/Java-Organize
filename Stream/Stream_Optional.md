@@ -179,6 +179,7 @@
     ```java
 
     orElse("content")
+    //content가없어도 ""빈 객체를 넣어줘야한다.
     orElseGet("Rambda content")
     orElseThrow("Exception content")
     //위 매서드는 앞에있는 Optional이 null일 경우에
@@ -193,10 +194,19 @@
 
     //값이 있을때만 ! Rambda식이 발동한다.
 
-    ifPresentOrElse(Comsumer,Runnable)
+    void ifPresentOrElse(Comsumer,Runnable)
 
     //위 매서드는 값이있으면 Comsumer function이 호출
     //값이 null이면 Runnable이 호출된다.
+
+
+
+    Optional<T> opt = Optional.<T>empty();
+    //이렇게 null대신 empty로 초기화 하면
+    //toString을 호출할때 Optional.empty라고 나오지만
+    //여기서 get()을 호출하면 not value present라고 예외가 발생한다.
+    //따라서 null이 있을거같은 객체에는
+    //get보다 orElse를 사용하자
     ```
-    
+
 
