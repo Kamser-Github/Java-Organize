@@ -174,3 +174,29 @@
     Optional<String> opt = Optional.ofNullable(null);
     Optional<String> optEmpty = Optional.empty();
     opt.equals(optEmpty); // true
+
++ 되짚어보기
+    ```java
+
+    orElse("content")
+    orElseGet("Rambda content")
+    orElseThrow("Exception content")
+    //위 매서드는 앞에있는 Optional이 null일 경우에
+    //안에 있는 content가 실행이 된다
+    //----
+
+    isPresent()
+
+    //위 매서드는 null일 경우에만 false
+
+    ifPresent(Comsumer)
+
+    //값이 있을때만 ! Rambda식이 발동한다.
+
+    ifPresentOrElse(Comsumer,Runnable)
+
+    //위 매서드는 값이있으면 Comsumer function이 호출
+    //값이 null이면 Runnable이 호출된다.
+    ```
+    
+
