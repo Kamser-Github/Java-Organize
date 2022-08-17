@@ -72,18 +72,25 @@
 
 6.Stream<T> , IntStream
 
-+ 지네릭타입 Stream<T>에서 기본형 타입인
++ 지네릭타입 Stream<T>에서 기본형 타입
     + int,long,double등은 오토박싱&언박싱이 실행됨
     + 비효율이라 기본형 타입을 다루는 스트림이 있음
 + IntStream,LongStream,DoubleStream
 + 타입이 기본형으로 정해져있음
     + int,double,long으로 계산하기 편한 메소드 제공
     + sum(),average() 등
+    
 
 7.병렬 스트림
-+ Stream뒤에 .paralle() //병렬로 실행됨.
-+ default는 직렬 .sequential90 //직렬
-+ 병렬이라고 무조건 빠른게 아님
+(추가수정 예정)
++ Stream뒤에 .paralle //병렬로 실행됨.
+    ```java
+    Stream.of(Arr).paralleStream().~~~~
+    ```
++ default는 직렬 .sequential() //직렬
+
++ 병렬이라고 직렬보다 무조건 빠른게 아니다
+
 
 
 

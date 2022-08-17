@@ -180,6 +180,11 @@
 
     orElse("content")
     //content가없어도 ""빈 객체를 넣어줘야한다.
+    
+    T orElse(T other)//로 정의되어있기때문에
+    //객체일때는 null
+    //그 타입에 맞는 참조변수가 와야한다.
+
     orElseGet("Rambda content")
     orElseThrow("Exception content")
     //위 매서드는 앞에있는 Optional이 null일 경우에
