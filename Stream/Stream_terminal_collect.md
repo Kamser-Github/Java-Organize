@@ -260,4 +260,90 @@ Collector partitioningBy(Predicate predicate,Collector downStream)
     //두번째 매개변수가 그 분할한 조건으로 요소를 수집해서 리스트로만든다.
     ```
 
+## groupingBy()에 의한 분류
+> ### 기본 - List<'T'> 반환
+> ### toSet(),toCollection(HashSet::new)사용시
+> ### Map<T,V>로 반환 지네릭 타입도 맞춰서 변경
 
+```java
+Map<Integer,List<Student>> stuBan = stuStream
+        .collect(Collectors.groupingBy(Student::getBan),Collectors.toList());
+
+//groupingBy 매서드를 가져와보면
+groupingBy(Function<? super T, ? extends K> classifier) {
+        return groupingBy(classifier, toList());
+    }
+//기본적으로 toList()가 붙어있어서
+//toList는 생략이 가능하다.
+//생략을 안하고도 사용이 가능하다
+
+//여기서 두번째 value값으로 List가 아니라
+//다시 Map으로 반환할수도 있다.
+
+Map<Integer,HashSet<Student>> stuHak = stuStream
+    .collect(Collectors.groupingBy(Student::getHak,
+        Collectors.toCollection(HashSet::new)));
+//Interger의 값에는 getHak이 key값으로 들어가있고
+//key로 꺼내면 그 그룹화된 HashSet이 나온다.
+
+Map<Student.level,Long> stuByLevel = stuStream
+    .collect(Collectors.groupingBy(s->{
+        if(s.getScore()>=200)   return Student.Level.HIGH;
+        else if(s.getScore()>=100) return Student.Level.MID;
+        else    return Student.Level.LOW;
+    },Collectors.counting())
+    );
+//partitioningBy처럼 여러번 중복사용이 가능하다;
+Map<Integer,Map<Integer,List<Student>>> stuByHakAndBan = stuStream
+    .collect(Collectors.groupingBy(Student::getHak,
+        groupingBy(Student::getBan)
+        ));
+
+
+//partitioningBy에서 객체로 저장하고싶을때 R -> RR로 꺼내주던
+//collectingAndThen도 사용이 가능하다.
+
+Map<Integer,Map<Integer,Student>> topStuByHakAndBan = stuStream
+    .collect(Collectors.groupingBy(Student::getHak,
+        Collectors.groupingBy(Student::getBan,
+            Collectors.collectingByAndThen(
+                Collectors.maxBy(Comparator.comparingInt(Student::getScore))
+                )
+            )
+    ));
+
+
+//추가 코드
+Map<Integer,Map<Integer,Set<Student.Level>>> stuByHakAndBan = stuStream
+    .collect(
+        Collectors.groupingBy(Student::getHak,
+            Collectors.groupingBy(Student::getBan,
+                mapping(s->{
+                    if(s.getScore()>=200)       return Student.Level.HIGH;
+                    else if(s.getScore()>=100)  return Student.Level.MID;
+                    else                        return Student.Level.LOW;
+                },toSet())
+            )
+        )
+    );
+/*
+여기서 헷갈렸던 부분이
+저 Collectors.grouping(Function<? super T, ? extends K>)
+? extends K에 나오는 부분에 있는게 무조건 값이 하나라는게
+단순히 숫자나 boolean값이 아니라
+해당 Function에서 나오는 값으로 조합해서
+그 조합끼리 List를 만드는것이다.
+거기서 다시 groupingBy를해서 Map안에 다시 Map을
+groupingBy로 나누는데 그 기준을 성적 200,100,그 이하로 나눈것
+기준이 간단하면 메서드로 표현하고
+아니라면 그 기준을 Function으로 하면된다.
+
+예를 들어
+
+Function<? super T, ? extends K>에
+s-> s.getHak()+"-"+s.getBan() 대입될 경우
+[학년 - 반]으로 분류를 한다는것.
+
+*/
+
+```
