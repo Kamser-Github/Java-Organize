@@ -12,12 +12,21 @@
 
     sort()할때 , 비교기준을 제공하는 Comparator를 필요한것과 같다.
     
-```java
-    Object collect(Collector collecotor)//Collector를 구현한 객체를 매개변수로 필요
-    Object collect(Supplier supplier,BiComsumer accumulator,BiConsumer combiner)
+> ### 즉 collect.를 쓰려면 Collector를 구현한 클래스가 오거나    
+> ### 반환값이 Collector인 Collectors의 클래스 매소드를 사용한다.
+> ### 메소드의 대부분을 static으로 가지고 있기 때문에
+> ### Collectors.mapping(),Collectors.reducing()등
+> ### import static java.util.stream.Collectors;
+> ### Collectors.partitioningBy -> partitioning()으로 사용
+> ### 긴 클래스 수식어를 지운다.   
 
-    //아래 매서드는 잘 사용하지 않지만
-    //간단한 람다식으로 수집할때 사용하면 편리하다
+        
+```java
+Object collect(Collector collecotor)//Collector를 구현한 객체를 매개변수로 필요
+Object collect(Supplier supplier,BiComsumer accumulator,BiConsumer combiner)
+
+//아래 매서드는 잘 사용하지 않지만
+//간단한 람다식으로 수집할때 사용하면 편리하다
 ```
 
 ## Stream -> 컬렉션과 배열로 변환
