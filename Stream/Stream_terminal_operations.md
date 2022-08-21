@@ -92,6 +92,8 @@
     //get(), getAsInt() 보다는
     //max.getAsInt();
     max.orElse("");//
+    //이때 orElse()에서 content
+
     max.orElseGet(()->0);//
     //이렇게 안전하게 하는게 더 좋다
     //내부적으로 돌아가는걸 보면 이해하기가 편하다
