@@ -124,8 +124,60 @@ public class Mouse{
     결국 자료형데이터는 int[][] a안에 있는
     int[] b에 0번째 ~ 길이까지가 기본형 데이터가 들어가있는것.
 
+## 변수와 메서드
+> ### 변수:데이터 한개만(형태) 저장 가능
+> ### 메서드:메서드 이름이 변수역할 동작후 데이터 하나만 생성한다.
 
+```java
+//DateType 
+int a = 10;
 
+//return DataType
+int sum = a+b;
+
+int v = sum(10,30);
+//method 호출을 하면
+
+public static int sum(int a,int b){
+    return a+b;
+}
+
+//메서드 이름이 결과값이 담기고
+//그 값을 v에 할당한다.
+
+//따라서 변수와 메서드는 비슷하게 작동한다.
+```
+### 2.매서드의 매개변수 전달 기법
+> ### Call By Value
+```java
+/*
+값 자체가 복사되어 갔기때문에
+그 값이 변경되거나 사라져도 상관이 없다.
+*/
+int a=10 ; int b=20;
+int v = sum(a,b);
+//sum(10,20)이 자체로 할당되어 이동
+```
+
+> ### Call By Reference(번지전달 기법)
+```java
+/*
+객체의 주소값이 들어간다.
+따라서 매서드 내에서 참조변수로 접근한다면
+본래에 있는 객체의 값도 변경이 된다.
+*/
+class Data{int x;}
+
+void changeNum(Data data){
+    data.x = 100;
+}
+
+/*
+이렇게 되면 본래 Data의 x값도 변경이 된다.
+단 클래스 변수는 변경이 되지만
+인스턴스 변수는 해당 인스턴스 값만 변경된다.
+*/
+```
 
 # JVM
 ## static : non static 
