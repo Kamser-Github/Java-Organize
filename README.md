@@ -10,7 +10,7 @@
 1. Collection
 2. Inner class
 3. enum class
-4. Steam class
+4. Steam
 5. Generics
     
 > ## 공부해하는 개념
