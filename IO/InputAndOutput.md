@@ -247,3 +247,129 @@ String str = new String(byteArray2,offset,couont2,Charset.forName("UTF-8"));
 is2.close();
 is3.close();
 ```
+
+#FileOutputStream으로 OutputStream 생성
+
+> FileOutputStream <-File에 byte단위로 데이터를 쓰는 OutputStream을 상속한 클래스
+   
++ FileOutputStream 생성자
+```java
+FileOutputStream(File file)
+FileOutputStream(File file,boolean append)
+//매개변수로 넘어온 file을 쓰기위한 OutputStream 생성
+//append가 true인 경우 이어쓰기,
+//기본은 false  -  덮어쓰기
+FileOutputStream(String name)
+FileOutputStream(String name,boolean append)
+//매개변수로 넘어온 name의 위치의 파일을 쓰기위해 객체생성
+
+//#1. 파일 객체 생성
+File outFile1 = new File("outFile1.txt");
+File outFile2 = new File("outFile2.txt");
+
+//#2. FileOutputStream 객체 생성
+OutputStream fos1 = new FileOutputStream(outFile1);
+OutputStream fos2 = new FileOutputStream(outFile2,true);
+//fos2는 outFile2에 이어쓰기를 한다.
+
+//# 파일 경로로 바로 넣기
+OutputStream fos = new FileOutputStream("c:/kamser/temp/aa.txt");
+```
+`쓰기 방식 : 영문(byte) -> 파일 : 영문(byte)`   
+
+> ## (File)OutputStream 매서 활용   
+```java
+- void write(int b),void flush() , void close()
+
+//ex)
+//입력파일 생성
+File outFile = new File("src/kr/javaPractice/FileOutputStream.txt");
+if(!foutFile.exists()) outFile.creatNewFile();
+//파일을 쓰는 경우에는 생략 가능하다
+//이미 메서드 안에 새 파일 생성이 들어가있음
+
+//#1 1byte 단위 쓰기
+OutputStream os1 = new FileOutputStream(outFile,true);//이어쓰기
+os1.write('j');
+os1.write('a');
+os1.write('v');
+os1.write('a');
+os1.write('\r'); //13
+os1.write('\n'); //10 코드에선 \n으로도 개행가능.
+/*
+단 윈도우 콘솔에선 enter 입력시 2byte(\r\n) 입력됨
+*/
+os1.flush();
+//FileOutputStream은 내부적으로 메모리 버퍼를 사용하지않아 생략가능
+os1.close();
+/*
+여기서 'j'는 char로 2byte에 보관되는걸 알고있다.
+그러면 write는 1byte를 쓰는데 문제가 안되는건
+char에 메모리에 □□ 에 다 쓰이는게 아니라
+□j 이렇게 사용되기 때문에 write(int a) 라고하면
+char - > int 로 자동형변환이 되고
+□j -> □□□j로 인식해서 1byte로 작성이 된다.
+이때 한글을 입력하면 2byte를 다 쓰기 때문에
+write에서는 맨 int 메모리에 □□□★ 마지막만 인식하기때문에
+글자가 깨지게 된다
+*/
+//#2 n-byte 단위로 쓰기( byte[]을 처음부터 끝까지 사용한다.)
+OutputStream os2 = new FileOutputStream(outFile.true);//내용연결
+
+byte[] byteArray1 = "Hello!".getBytes();
+// String -> byte[] 분해하는 매서드
+//이때 매개변수가 없으면 기본 디폴트 문자셋으로 변경되는데
+//이 작업 파일의 문자셋으로 분해된다.
+
+os2.write(byteArray1);
+os2.write("\n");
+
+os2.flush();//FileOutputStream은 내부적으로 메모리 버퍼를
+os2.close();//사용하지 않아서 생략이 가능하다.
+
+//#3. n-byte 단위쓰기(byte[]의 offset 위치부터 length개수를 읽어와 출력)
+OutputStream os3 = new FileOutputStream(outFile,true);//내용 출력
+
+byte[] byteArray2 = "Better the last smaile than the first laughter.".getBytes();
+
+os3.write(byteArry2,7,8);
+//해당 배열에서 index 7부터 길이 8을 읽어서 os3 객체가 가진주소에
+//쓰기를 하겠다는것.
+
+os3.flush();
+os3.close();
+```
+
+`영어와 다르게 한글은 분해 문자셋과 저장되는 파일의 문자셋이 중요하다`
+```
+문자를 분해하는 문자셋은 UTF-8
+저장되는 위치의 파일의 문자셋은 ANSI
+
+파일에 분해되서 저장될때에는 문자당 3byte 분해되서 저장되지만
+저장되는 위치에서 인식할때에는 2byte로 인식해서 조합한다.
+```
+
+> ## 한글로 write 하기.   
+
+```java
+String str = "안녕하세요자바입니다";
+byte[] byteArray1 = str.getBytes(); // 3byte*10
+
+OutputStream os2 = new FileOutputStream(outFile,false);//덮어쓰기
+os2.write(byteArray1);
+os2.write('\n');
+//안녕하세요자바입니다
+
+os2.flush();
+os2.close();
+
+//offset으로 사용하기
+byte[] byteArray2 = str.getBytes(Charset.defaultCharset());
+
+OutputStream os3 = new FileOutputStream(outFile,true);//내용 연결
+os3.write(byteArray2,6,6);
+//이때 한글은 문자셋이 UTF-8 -3byte
+//나머지는 2byte이기때문에 길이나 시작지점을 확인해야한다.
+os3.flush();
+os3.close();
+```
