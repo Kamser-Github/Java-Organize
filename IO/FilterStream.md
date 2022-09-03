@@ -217,11 +217,16 @@ try(
     dos.flush();
 
 }catch(IOException e){}
-
-//이렇게 필터에 필터를 사용할수가 있다.
-//이유는 매개변수로 OutputStream이 오는데
-//서로 연결해서 사용이 가능하다.
-
+/*
+이렇게 필터에 필터를 사용할수가 있다.
+이유는 매개변수로 OutputStream이 오는데
+서로 연결해서 사용이 가능하다.
+필터 2개 이상을 사용할때 정해진 순서는 없지만
+객체는 참조변수 타입이 가진 메서드만 사용이 가능하다
+이때 실체 객체가 재정의가 되어있으면 사용이 가능하지만
+이미 재정의는 read 와 write를 했기때문에
+DataOutputStream이 마지막에 와야한다.
+*/
 //데이터 읽기
 try(InputStream is = new FileInputStream(file);
     BufferedInputStream bis = new BufferedInputStream(is);
