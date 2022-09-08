@@ -31,9 +31,11 @@ list.set(4,"마");
 //4.데이터 삭제
 list.remove(3);
 //가 나 다 마 바
+```
 
-//LinkedList에만 있는 Method
+`LinkedList에만 있는 Method`
 
+```java
 //1.맨 앞에 데이터 추가.
 list.addFirst("A");
 //A 가 나 다 마 바
