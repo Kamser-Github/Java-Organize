@@ -36,3 +36,4 @@
 > 슈도코드로 작성한걸 코드로  옴기기는데 어려운 것
 
     Collection,Stream,Thread,Enum,IO-print계열
+    
