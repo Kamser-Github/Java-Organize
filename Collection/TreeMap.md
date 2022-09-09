@@ -122,3 +122,29 @@ TreeMap<Student,String> sample = new TreeMap<>(new Comparator<Student>(){
     }
 });
 ```
+> 출력해보기 연습
+```java
+//Map 출력방법 3가지 (TreeMap이니까 subMap으로)
+//1.Iterator + keySet()
+Iterator<Integer> it = sample.subMap(6, 14).keySet().iterator();
+while(it.hasNext()){
+    Integer key = it.next();
+    System.out.printf("%d:%s",key,sample.get(key));
+}
+System.out.println();
+
+//2.Iterator + entrySet()
+Iterator<Map.Entry<Integer,String>> it2 = sample.subMap(4,true,12,true).entrySet().iterator();
+while(it2.hasNext()) {
+    Map.Entry<Integer,String> map = it2.next();
+    Integer num = map.getKey();
+    String str = map.getValue();
+    System.out.printf("%d:%s",num,str);
+}
+
+//3.for + entrySet()
+Set<Map.Entry<Integer,String>> set = sample.subMap(6,false,16,false).entrySet();
+for(Map.Entry<Integer,String> a : set) {
+    System.out.printf("%d:%s",a.getKey(),a.getValue());
+}
+```
