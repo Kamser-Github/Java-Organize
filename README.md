@@ -1,12 +1,13 @@
 # 개념정리,부족한 개념을 적어두는 공간.
 
 > ## 개념 정리
-1. 변수
-2. 상속
-3. 스트림
-4. 조건문
-5. I/O
-6. Collection
+1. ~~변수~~
+2. ~~상속~~
+3. ~~스트림~~
+4. ~~조건문~~
+5. ~~I/O~~
+6. ~~Collection~~
+7. Enum
 
 > ## 부족한 개념
 1. Collection
@@ -16,6 +17,7 @@
 3. enum class
     + 한번 공부를했는데 필요성이 느겨져서 다시 해야된다
 4. Steam
+    + 더 익숙하게 사용해야할듯
 5. Generics
     
 > ## 공부해하는 개념
@@ -35,10 +37,10 @@
 
 > 슈도코드로 작성한걸 코드로  옴기기는데 어려운 것
 
-    Collection,Stream,Thread,Enum,IO-print계열
+    Stream,Thread,Enum,IO-print계열
 
 > JavaAPI 배운것중 복습해야하는것   
 
     Objects,Collections,Arrays,Collectors
     
-    Spliterator
+    Spliterator,Properties(필요하면 추가공부)
