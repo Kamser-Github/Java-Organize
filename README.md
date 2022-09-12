@@ -7,29 +7,32 @@
 4. ~~조건문~~
 5. ~~I/O~~
 6. ~~Collection~~
-7. Enum
+7. ~~Enum~~
+8. Network(~ing)
 
 > ## 부족한 개념
 1. Collection
     + 조직관계도 그리면서 개념익히기
 2. Inner class
-    + 정의만 알고 사용할줄은 모른다.
+    + ~~정의만 알고 사용할줄은 모른다.~~
+    + 배우면 배울수록 끝을 알수없는 개념
 3. enum class
-    + 한번 공부를했는데 필요성이 느겨져서 다시 해야된다
+    + ~~한번 공부를했는데 필요성이 느겨져서 다시 해야된다~~(복습완료)
 4. Steam
     + 더 익숙하게 사용해야할듯
-5. Generics
+5. Generics   
     
 > ## 공부해하는 개념
-1. TCP
+1. TCP(~ing)
+2. SQL
+3. JSP
+4. SPRING
+5. HTML,CSS,JS 개념정리(추후예정)
 
-
-```
-우선순위
-1. Collection   
+> ## 우선순위
+~~1. Collection~~   
 2. Generics   
-3. I/O
-```
+~~3. I/O~~
 
 > 반복 복습예정
 
