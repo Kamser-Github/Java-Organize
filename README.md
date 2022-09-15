@@ -24,14 +24,14 @@
     
 > ## 공부해하는 개념
 1. TCP(~ing)
-2. SQL
+2. SQL(~ing)
 3. JSP
 4. SPRING
 5. HTML,CSS,JS 개념정리(추후예정)
 
 > ## 우선순위
 ~~1. Collection~~   
-2. Generics   
+2. Generics(~ing)  
 ~~3. I/O~~
 
 > 반복 복습예정
