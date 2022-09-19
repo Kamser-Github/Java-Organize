@@ -7,11 +7,15 @@
     프로그램 -> 화면 , 프린터 , 파일, 네트워크
     // 프로그램 -> 외부 [출력]
 
-+ ## byte단위 입력 InputStream
-+ ## byte단위 출력 OutputStream   
+> ### 스트림이란 데이터를 운반하는데 사용되는 연결통로
 
-+ ## char단위 입력 Reader
-+ ## char단위 출력 Writer   
+
+
++ ### byte단위 입력 InputStream
++ ### byte단위 출력 OutputStream   
+
++ ### char단위 입력 Reader
++ ### char단위 출력 Writer   
 
 `char단위로 지정한 이유는 문자에 특화된 IO일뿐이지 IO-byte단위로도 가능하다`
    

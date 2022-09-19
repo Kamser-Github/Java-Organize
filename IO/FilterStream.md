@@ -4,13 +4,79 @@
 1. 속도향상
 2. 다양한 데이터 타입 입출력
 3. 다양한 데이터 출력에 특화
+<br>
 
-`BufferedInputStream/BufferedOutputStream`
+### `BufferedInputStream/BufferedOutputStream`
 ```
 입출력 과정에서 파일을 Access를 byte단위로 하다보니 속도가 저하된다.
 이때 buffer라는 중간 메모리에 한번에 메모리를 담아서
 한번만 Access를 하기때문에 속도 차이가 난다.
 ```
+
+```
+BufferedInputStream 
+
+버퍼의 크기만큼 데이터를 읽어다 자신의 내부 버퍼에 저장
+프로그램에서 버퍼에 저장된 데이터를 읽으면 되는 것이다.
+프로그램에서 버퍼에 저장된 데이터를 다 읽고 그다음 데이터를 읽기 위해
+read() 메서드가 호출이 되면 입력소스로부터 다시 버퍼 크기 만큼의
+데이터를 읽어다 버퍼에 저장해놓는다 이 작업을 반복한다
+
+--
+
+BufferedOutputStream
+
+프로그램에서 write매서드를 이용한 출력이 버퍼에 임시 저장된다.
+버퍼가 가득차게 되면 버퍼의 모든 내용을 출력 소스에 출력한다.
+버퍼를 비우고 다시 프로그램으로부터 출력을 저장할 준비를 한다.
+버퍼가 가득 찼을때만 출력소스에 출력을 하기 때문에 마지막 출력부분이
+출력소스에 쓰이지 못하고 버퍼에 남아있는 채로 프로그램이 종료될수 있기에
+주의해야한다.
+따라서 출력 작업을 마친후 close()나 flush()를 호출에서
+버퍼에 남아있는 모든 내용이 출력소스에 출력되도록 해야 한다.
+
+```
+```java
+File file = new File("src/kr/filetxt/test1.txt");
+try {
+    FileOutputStream fos = new FileOutputStream(file);
+    BufferedOutputStream bos = new BufferedOutputStream(fos,5);
+    for(int i='1'; i<='9'; i++) {
+        bos.write(i);
+    }
+    fos.close();
+} catch (IOException e) {
+    System.out.println("저장 실패");
+}
+//test1.txt = > 12345
+
+여기에서 왜 12345만 저장이 된걸까?
+그 이유는 버퍼 크기가 5byte이고
+버퍼가 출력이되려면 방법은 3가지이다.
+1.버퍼가 가득차서 버퍼를 비우면서 출력
+2.flush() 매서드로 출력
+3.close() 버퍼 재화를 반납하면서 출력
+
+여기서는 fos.close() 했지만
+bos.close()해주면 된다.
+
+여기서 flush()보다 close()를 추천하는 이유는.
+
+BufferedOutputStream extends FilterOutputStream
+
+FilterOutputStream << 매서드를 열어보면
+
+public void close() throw IOException {
+    try{
+        flush();
+    } catch (IOException ignore){}
+    out.close();
+    //여기서 out은 OutputStream을 말한다.
+}
+이처럼 보조 스트림을 사용하게 되면
+flush(),close() 둘다 사용하지 않고
+close()만 호출하면 된다.
+---
 ```java
 //input
 
@@ -116,7 +182,10 @@ System.out.println("최종시간 use Buffered : "+time2);//3501900
 
 System.out.println("최종 비율 = "+time1/time2+"배 차이");//차이가 매번 다르긴하지만 70배가  평균
 ```
-`Data타입(int,long,float,double,UTF8 ..)으로 입력/출력 수행`
+<br>
+
+### `Data타입(int,long,float,double,UTF8 ..)으로 입력/출력 수행`   
+> 조상 FilterStream이기 때문에 마찬가지로 close()만 호출해도된다.
 
 ```
 다양한 데이터를 1byte가 아니라 데이터 타입에 맞게 저장
@@ -124,6 +193,17 @@ int = 4 , double = 8 , float = 4 , UTF-8 = 3 등등
 따라서 저장할때 사용했던 타입은
 불러올때도 같은 타입으로 불러와야 읽을수있다
 (문자셋과 비슷한 느낌)
+
+더이상 읽어올게 없을 경우 EOFException을 발생시킨다.
+
+**주의할점**
+반환타입이 byte[] 일경우에 주의해야한다.
+byte 범위는 -128~127 이기때문에
+숫자가 양수일때 128을 넘어가면 -128부터 시작이다.
+숫자가 음수일때는 -128을 넘어가면 127부터 시작이다.
+
+따라서 상황에 따라 +256 , -256을 해야한다.
+
 ```
 ```java
 //DataInputStream 생성자
@@ -189,6 +269,97 @@ try(InputStream is = new FileInputStream(dataFile);
         System.out.println(dis.readUTF); // 안녕하세요
 
 }catch(IOException e){}
+
+public class DataOutputStreamEx03 {
+	public static void main(String[] args) {
+		int[] score = { 100 , 90 , 95 , 85 , 50 };
+		
+		try {
+			FileOutputStream fos = new FileOutputStream("src/kr/filetxt/data.dat");
+			DataOutputStream dos = new DataOutputStream(fos);
+			
+			for(int i=0 ; i<score.length ; i++) {
+				dos.writeInt(score[i]);
+			}
+			dos.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+/*
+	  	data.dat
+	  	
+	  	00 00 00 64 / 00 00 00 5A / 00 00 00 55 / 00 00 00 32
+	  	     100           90            95			   85	
+	  	
+	  	int 크기가 4byte고 16진수는 두자리가 1byte다.
+	  	반대로 읽어보겠다.
+*/
+FileInputStream fis = null;
+DataInputStream dis = null;
+
+//스코어 총합구하기.
+int sum = 0;
+int score = 0;
+try {
+    fis = new FileInputStream("src/kr/filetxt/data.dat");
+    dis = new DataInputStream(fis);
+    
+    while(true) {
+        score = dis.readInt();
+        System.out.println("점수 : "+score);
+        sum+=score;
+    }
+    /*
+    다른 IO와 다르게
+    DataIO는 더이상 읽을게 없으면 EOFException을 발생시킨다.
+    따라서 catch로 받아서 그때 결과를 출력하고
+    Fm대로라면 while문이 끝나고 close()를 해야하는데
+    EOFException으로 while문은 무한 반복문이라서
+    finally 블럭에서 닫도록 처리를 했다.
+    */
+} catch (EOFException e) {
+    System.out.println("총합은 = "+sum);
+} catch (IOException e) {
+    e.printStackTrace();
+} finally {
+    try {
+        if(dis!=null)
+            dis.close();
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+}
+/*
+    여기서 추가 주의할점
+    dis = null인데 close()를 호출하면
+    NullPointerException이 발생하므로
+    if문으로 null 예외 발생을 없애고
+    close()는 IOException을 발생시키므로
+    다시 try - catch로 감싸준다.
+*/
+//JDK 1.7
+//try - catch - resources 구문으로 close()를 호출 안해도 된다.
+try (FileInputStream fis = new FileInputStream("score.dat");
+    DataInputStream dis = new DataInputStream(fis)) 
+/*
+    try(    IO구문절1; 
+            IO구문절2;
+            IO구문절3   ) 으로 사용하면된다.
+*/
+{
+    while(true) {
+        score = dis.readInt();
+        System.out.println(score);	
+        sum += score;
+    }
+} catch (EOFException e) {
+    System.out.println("점수의 총합은 " + sum +"입니다.");
+} catch (IOException ie) {
+    ie.printStackTrace();
+}
+
+
 /*
 각자 데이터 타입에 맞는 바이트수로 나누어서 저장했기때문에
 반대로 데이터를 읽어올때도 맞는 바이트수로 선택해서 읽어야한다.
