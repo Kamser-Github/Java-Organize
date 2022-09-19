@@ -75,4 +75,36 @@ for(Integer a : ints){
 //list의 size() 8
 //a는 길이가 10
 //따라서 ints의 길이는 10 빈 배열은 null로 초기화
+
+
+//contains를 사용하고 싶으면 equals를 오버라이딩 해야한다
+class Student {
+	int ban;
+	String name;
+	
+	Student(int ban,String name){
+		this.ban = ban;
+		this.name = name;
+	}
+	
+	@Override
+	public String toString() {
+		return ban+":"+name;
+	}
+	@Override
+	public boolean equals(Object o) {
+		if(o instanceof Student) {
+			return this.ban==((Student) o).ban 
+					&& this.name.equals(((Student) o).name);
+		}
+		else
+			return false;
+	}
+}
+
+// 그 이유는 equals는 Object로 매개변수로 받기때문에
+// 새 객체타입에서 equals로 같은지 같지 않은지 함수로
+// 형변환후 필드 하나하나를 비교해서 값을 돌려줘야한다.
+
+// 오버라이딩이 없으면 기본 equals로 하기때문에 false이 된다.
 ```
