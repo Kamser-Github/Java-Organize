@@ -103,7 +103,7 @@ student[][] = new student[0][0];
 <br>
 
 ```java
-if( 조건식 1 )       { 실행문장 1; }
+if ( 조건식 1 )       { 실행문장 1; }
 else if ( 조건식 2 ) { 실행문장 2; }
 else if ( 조건식 3 ) { 실행문장 3; }
 else if ( 조건식 4 ) { 실행문장 4; }
@@ -121,4 +121,137 @@ if문을 빠져 나가기 때문에 주의해야한다.
 if - else if 문만 잘 사용해도 
 break;을 덜 사용할수 있다.
 ```
-4
+
+> ### 예외 경우의 수를 작성하기.   
+<br>
+ 
+```
+주어진 상황에서 경우의 수에 따라
+값이 변경되는 변수가 있다면
+그 경우에수에 맞게 끝까지 변수를 재차 확인해봐야한다.
+>>
+/KB_project/src/lv05io/IO_Vector.java
+209행
+>>
+```
+
+> ### \r \n 차이 미숙지
+<br>
+
+```java
+//java에서 문자열 줄바꿈을 표현 할때 사용하는 escape 문자
+1. \n   - unix
+2. \r   - max
+3. \r\n - windows
+
+한가지만 사용하면 시스템에 따라 줄바꿈이 안될수도 있다.
+System.getProperty("line.separator");
+System.lineSeparator()
+
+위 메서드를 사용하여 개행문자를 가져와 사용하는 방법도 있다.
+
+public class NewLine{
+    public static void main(String[] args){
+        System.out.println("Berger !"+System.lineSeparator()+"King !");
+    }
+}
+/*
+Berger !
+King !
+*/
+결과가 깔끔하다.
+```
+> ### 파일을 읽어올때 생기는 예외발생 주의
+<br>
+
+```java
+//문제 발생지
+"/KB_project/src/lv05io/IO_BagEx01.java"
+
+배열의 있는 데이터를 저장하고
+다시 데이터를 가져와서 읽는 IO연습
+
+//문제발생)
+/*
+txt 파일
+1행에는 고객번호 카운드 숫자
+2행에는 아이템 배열
+3행에는 고객이 담은 장바구니 배열
+4행에는 고객의 정보가 담긴 배열
+
+여기서 파일에 정보를 아무것도 안넣고
+FileWriter 메서드로 인해 txt 파일은 만들어진상황에서
+바로 readLine()으로 읽어올때 생기는 오류 처리가 미흡
+
+행마다 각자 데이터를 변환해서 저장하는 구현부인데
+
+실수한점
+1.파일을 저장할때 writer()에서 빈데이터라도 행을 넘겨야하고
+2.빈 객체를 불러올때 readLine()에서 null 예외처리가 미흡
+3.조건문이에서 처리가 미숙해서 하나로 쓸수있는걸
+  나누어서 작성하는 실수가 생김.
+*/
+try {
+    fr = new FileReader(file);
+    br = new BufferedReader(fr);
+    
+    String data = "";
+    //고객번호 로드
+    if((data=br.readLine())!=null)
+        nextPk = Integer.parseInt(data);
+    else
+        nextPk = 0;
+    
+    //아이템 로드
+    if((data=br.readLine())!=null)
+        items = data.split(",");
+    else
+        items = null;
+    System.out.println("아이템 로드 : "+data);
+    
+    //장바구니 로드
+    data=br.readLine();
+    if(data.length()!=0) {
+        System.out.println("["+data+"]");
+        String[] jangList = data.split(",");
+        jang = new int[jangList.length][2];
+        System.out.println(jang.length);
+        for(int i=0 ; i<jangList.length ; i++) {
+            String[] userJang = jangList[i].split("/");
+            jang[i][0]=Integer.parseInt(userJang[0]);
+            jang[i][1]=Integer.parseInt(userJang[1]);
+        }
+        size = jangList.length;
+    }
+    else
+        jang=null;
+    //고객 정보 로드
+    data=br.readLine();
+    if(data.length()!=0) {
+        String[] userList = data.split(",");
+        ids = new String[userList.length];
+        pws = new String[userList.length];
+        pks = new int[userList.length];
+        
+        for(int i=0; i<userList.length ; i++) {
+            String[] user = userList[i].split("/");
+            ids[i]=user[0];
+            pws[i]=user[1];
+            pks[i]=Integer.parseInt(user[2]);
+        }
+        nextJoinIdx = userList.length;
+    }
+    else {
+        ids = null;
+        pws = null;
+        pks = null;
+    }
+    
+    //로드 성공
+    log=1;
+    
+    System.out.println("로드성공");
+}catch(IOException e) {
+    System.out.println("로드실패");
+}
+```
