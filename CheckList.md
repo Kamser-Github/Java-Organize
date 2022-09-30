@@ -298,3 +298,19 @@ try {
 
 한번 코드 구상을 끝까지 손코딩으로 돌려봐야한다.
 ```
+
+### 결과 로직이 공통이 있다면 묶어서 처리하기
+```java
+/KB_project/src/lv05io/ArrayFreeBoardQ1.java
+System.out.println("1) 추가하기");
+//FileWriter(file,true)
+System.out.println("3) 삭제하기");
+//FileWriter(file)
+System.out.println("9) 수정하기");
+//FileWriter(file)
+
+//이 3개의 로직의 결과는 결국 다시 읽어와야 한다.
+//그런데 하나 로직마다 쓰기 읽기를 따로 따로 처리를 했기때문에
+//중복된 코드가 생기게 되었다.
+```
+
