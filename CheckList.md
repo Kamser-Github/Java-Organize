@@ -314,3 +314,51 @@ System.out.println("9) 수정하기");
 //중복된 코드가 생기게 되었다.
 ```
 
+### 객체 배열 미숙
+```java
+/*
+영화관 예매를 한다면
+
+좌석 7개
+좌석당 12000원
+좌석 예매 여부
+총 매출 합계
+*/
+//실수한 부분
+class Cinema{
+    private int price = 12000;
+    private int[] seats = new int[7];
+    private int total;
+    //이렇게 묶었다
+}
+//영화관과 좌석을 분리해서
+class Cinema{
+    private int total;
+    private String name;
+    private Seat seats = new Seat();
+}
+class Seat{
+    private int num;
+    private int price = 12000;
+    private boolean isReserve;
+}
+//영화관 따로 , 좌석 따로 만들고
+//포함관계로 묶는다.
+```
+### 객체내에 멤버변수를 사용할때 this
+```java
+class Ex01 {
+    int a ; 
+    int b ;
+    //이 방법이 아니라
+    int sum(){
+        return a+b;
+    }
+    //this
+    //클래스 자기 자신의 멤버 변수를 지칭해서 사용한다.
+    //중간에서 봤을때에도 멤버변수를 사용한다는걸 알수있게 작성한다.
+    int sum(){
+        return this.a+this.b;
+    }
+}
+```
