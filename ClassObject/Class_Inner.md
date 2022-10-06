@@ -273,4 +273,158 @@ public class Test {
       void를 생략할수 있게 한것.
 ```
 `연산자 new가 인스턴스 생성한 것이지 생성자는 초기화만 할뿐이다.`
-## 
+
+## `기본 생성자`
+```
+클래스내에 생성자가 없을경우 컴파일러가 기본 생성자를 추가하여 컴파일한다.
+
+주의할점 : 매개변수 있는 생성자를 만들경우
+            컴파일러는 기본생성자를 만들어주지 않는다.
+```
+## `매개변수 있는 생성자-오버로딩`
+```java
+인스턴스 초기화에 필요한 매개변수를 받을수 있다.
+따라서 ,
+        클래스를 작성할때 다양한 생성자를 제공하는것이
+        별도에 초기화를 하지 않도록 하는것이 바람직하다.
+
+public class Book {
+    String name;
+    int price;
+    int kind;
+
+    class Book(){...}
+    class Book(String name){...}
+    class Book(String name,int price){...}
+    class Book(String name,int price,int kind){...}
+}
+```
+## `private 생성자 매서드`
+```
+private 접근 제어로 객체를 생성할수 없다는 뜻이되므로
+객체를 생성하지 않고 사용할수있게 모든 클래스 멤버가 static이 되어야한다.
+
+ex ) Math,System ...
+
+항상 static 멤버는
+클래스 이름.클래스메서드 로 static이라는걸 표시해야한다.
+```
+## `생성자를 호출하는 this(),자기 자신을 가리키는 참조변수 this`
+> ### this()
+```java
+this()는 
+
+자신이 가지고 있는 생성자중에서 
+매개변수를 확인하고 해당 생성자를 호출한다.
+
+따라서 중복코드를 제거하고, 유지보수가 간단해진다.
+
+주의할점은 this()는 항상 먼저 초기화를 해야하는데.
+
+생성자는 클래스가 생성될 때 호출이 되므로
+클래스 생성이 완료 되지 않은 상태에서 
+생성자메서드 코드가 아니라면 오류가 발생한다.
+디폴트 생성자에서 생성이 완료되는 것이 아니라 this()를 사용해
+다른 생성자를 호출하므로 항상 this()가 먼저와야한다.
+
+class Texi {
+    int standardPrice ;
+    int addPrice ;
+    int peopleLimit ;
+
+    Texi (){
+        this(3800,150,4);
+    }
+    Texi (int standardPrice){
+        this.standardPrice = standardPrice;
+    }
+    Texi (int standardPrice,int addPrice){
+        this(standardPrice);
+        this.addPrice = addPrice;
+    }
+    Texi (int standardPrice,int addPrice,int peopleLimit){
+        this(standardPrice,addPrice);
+        this.peopleLimit = peopleLimit;
+    }
+}
+서로 기본 생성자로 초기화를 해도 값을 넣어줄수 있게 할수있으며
+다양한 생성자를 만들어도 중복코드가 발생하지 않게 할수 있다.
+```
+### this.
+```java
+자기 자신을 참조변수이며 주소를 가지고 있다.
+인스턴스 객체가 만들어질때 생성이 되며
+
+1.매개변수와 인스턴스 변수를 구분할때 사용
+2.주소를 반환
+
+2번 예시
+
+class Person {
+
+    ...
+    ...
+
+    Person returnItSelf(){
+        return this;
+    }
+}
+public static void main(String[] args){
+
+    Person noName = new Person();
+    Person p = noName.returnItSelf();
+    System.out.println(p);
+    System.out.println(noName);
+
+    //둘의 참조값은 같다.
+}
+```
+## `변수의 초기화`
+> ### 멤버변수의 초기화 방법
+```
+1. 명시적 초기화(explicit initialization)
+2. 생성자(constructor)
+3. 초기화 블럭(initialization block)
+    - 인스턴스 초기화 블럭 : 인스턴스 변수를 초기화 하는데 사용 
+    - 클래스 초기화 블럭   : 클래스 변수를 초기화 하는데 사용
+```
+> ### 명시적 초기화
+```java
+변수를 선언과 동시에 초기화 하는것을 명시적 초기화라 한다.
+가장 기본이면서 간단한 초기화 방법이고
+여러 초기화 방법중에서 가장 우선적으로 고려되어야 한다.
+
+class Home {
+    int door = 3;           //기본형 변수의 초기화
+    Room room = new Room(); //참조형 변수의 초기화
+}
+보다 복잡한 초기화 작업이 필요할때에는
+초기화 블럭, 또는 생성자를 사용해야한다.
+```
+>### 초기화블럭
+```java
+클래스 초기화 블럭      - 클래스 변수의 복잡한 초기화에 사용된다.
+인스턴스 초기화 블럭    - 인스턴스 변수의 복잡한 초기화에 사용된다.
+
+초기화 블럭 내에는 메서드 내에서와 같이 
+        조건문,반복문,예외처리구문등 자유롭게 사용할 수 있다.
+
+static {
+    //클래스 초기화 블럭
+}
+--
+{
+    //인스턴스 초기화 블럭
+}
+```
+> ### 멤버변수의 초기화 시기와 순서
+```
+클래스 변수의 초기화 시점 - 클래스가 처음 로딩될때 단 한번 ! 초기화
+인스턴스 변수의 초기화 시점 - 인스턴스가 생성될 때마다 각 인스턴스별로 초기화
+
+클래스 변수의 초기화 순서
+    기본값 => 명시적 초기화 => 클래스 초기화 블럭 (1회)
+
+인스턴스 변수의 초기화순서
+    기본값 => 명시적 초기화 => 인스턴스 초기화 블럭 => 생성자 (매회)
+```
