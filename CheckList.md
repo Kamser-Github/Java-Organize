@@ -419,3 +419,23 @@ equals 와 HashCode는 모두 객체의 주소를 사용하는 매서드이므�
 두 객체를 비교하기위해 오버라이딩을 했을 경우에
 equals와 HashCode는 같은 결과값이 나와야한다.
 ```
+
+### JDK 1.5 공변 변환 타입(covariant return type)
+```java
+//기존 메서드
+protected navtive Object clone()
+/*
+오버라이딩을 할때 조상 메서드의 반환타입을 
+자손타입의 클래스타입으로 변경이가능한것이다.
+*/
+//예제
+public Student clone(){
+    Object obj = null;
+    try{
+        obj = super.clone();
+    }catch (CloneNotSupportedException e){}
+    return (Point)obj;
+}
+//공변 변환타입을 사용하면 실제 반환되는 객체의 자존타입으로 사용할수잇어서
+//형변환이 줄어든다.
+```
