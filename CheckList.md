@@ -439,3 +439,120 @@ public Student clone(){
 //공변 변환타입을 사용하면 실제 반환되는 객체의 자존타입으로 사용할수잇어서
 //형변환이 줄어든다.
 ```
+
+### 클래스 멤버 변수는 생성자내에서 초기화하는게 좋다.
+```java
+class Data {
+    Ramdom ran ;
+    Scanner sc ;
+
+    Data(){
+        ran = new Random();
+        sc = new Scanner(System.in);
+    }
+}
+```
+### 생성자 내에 초기화가 많다면 참조 자료형은 따로 분리하는게 좋다
+```java
+class Data {
+    int number;
+    Ranmdom ran;
+    Scanner sc;
+    ArrayList<Student> list;
+    
+    Data(int number){
+        this.number = number
+        init();
+    }
+
+    private void init(){
+        ran = new Random();
+        sc = new Scanner(System.in);
+        list = new ArrayList<Student>();
+    }
+}
+```
+
+### 반환값으로 참조값을 주는건 조심해야한다.
+```java
+class School {
+    private ArrayList<Student> students;
+    private String name = name;
+
+    // public ArrayList<Subject> getStudents(){
+    //     return students;
+    // }
+    // 사용자가 해당 매서드로 객체에 접근해서
+    // 수정 삭제 검색등 다양하게 접근할수 있기때문이다.
+
+    // 대안 : 전체 과목에 대한 조회 용도로만 public 메소드를 제공
+}
+```
+
+### 반환값으로 참조값을 주는 매서드는 사용할때 조심하자.
+```java
+
+ArrayList<T> list = ArrayList<T>();
+   T t = list.get(i);
+/*
+일경우에 t에는 list에 i번째 객체와 참조값이 공유된다
+따라서 t를 수정하거나 다시 내용을 수정해서 list에 추가를 하면
+같은 개체가 두개가 들어가기때문에
+따로 복사를 해서 수정을 하고 전달해야한다.
+*/
+```
+
+### 객체배열에 저장할때 참조값을 확인해야한다.
+> 참조값 실수
+```java
+ArrayList<String[]> list = new ArrayList<>();
+String[] stringArr = new String[3];
+stringArr[0] = "1";
+stringArr[1] = "1";
+stringArr[2] = "1";
+list.add(stringArr);
+stringArr[0] = "3";
+stringArr[1] = "3";
+stringArr[2] = "3";
+list.add(stringArr);
+
+System.out.println(list);
+//[{"1","1","1"},{"3","3","3"}] 이렇게 저장되어있을거같지만
+//list를 찾아보면 저장된 두 객체의 참조값이 같다.
+//[379619aa,@379619aa]
+//new 연산자로 새 객체가 하나이고
+//그 객체 참조값으로 객체내 값만 변경된것일뿐이다.
+for(String[] arr : list) {
+    for(String string : arr) {
+        System.out.print(string);
+    }
+    System.out.println();
+}
+//333
+//333
+```
+> 넣을때마다 새 객체 주소로 넣어야한다.
+```java
+ArrayList<String[]> list = new ArrayList<>();
+		String[] stringArr = new String[3];
+		stringArr[0] = "1";
+		stringArr[1] = "1";
+		stringArr[2] = "1";
+		list.add(stringArr);
+		stringArr = new String[3];
+		stringArr[0] = "3";
+		stringArr[1] = "3";
+		stringArr[2] = "3";
+		list.add(stringArr);
+		System.out.println(list);
+		//379619aa,cac736f
+		for(String[] arr : list) {
+			for(String string : arr) {
+				System.out.print(string);
+			}
+			System.out.println();
+		}
+		//111
+		//333
+```
+
