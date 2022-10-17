@@ -20,12 +20,13 @@
     + ~~한번 공부를했는데 필요성이 느겨져서 다시 해야된다~~(복습완료)
 4. Steam
     + 더 익숙하게 사용해야할듯
-5. Generics   
+5. Generics(~ing)
+6. IO 관계도 다시 공부하기(바이트단위,문자단위)
     
 > ## 공부해하는 개념
 1. TCP(~ing)
 2. ~~SQL(~ing)~~
-3. JSP
+3. JSP(~ing)
 4. SPRING
 5. HTML,CSS,JS 개념정리(추후예정)
 
@@ -46,5 +47,5 @@
 > JavaAPI 배운것중 복습해야하는것   
 
     Objects,Collections,Arrays,Collectors
-    
     Spliterator,Properties(필요하면 추가공부),flatmap
+    형식화 클래스 복습.
