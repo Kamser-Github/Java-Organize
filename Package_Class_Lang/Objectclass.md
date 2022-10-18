@@ -73,6 +73,12 @@ if(str2D.deepEquals(str2D2)) => true;
 String str = null;
 System.out.println(Objects.toString(str)) // null;
 System.out.println(Objects.toString(str,"")) // "";
+
+java.time 패키지나
+String 클래스의 substring 같이
+원본 객체의 값을 변경하는게 아니라
+변경한 데이터를 반환하기 때문에
+변경된 값을 받을 참조변수가 필요하다.
 ```
 ### HashcCode(Object o....values)
 ```java
