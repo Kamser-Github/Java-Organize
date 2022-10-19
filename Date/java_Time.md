@@ -226,3 +226,122 @@ System.out.println(todayInt); //18
 //날짜
 System.out.println(ChronoField.DAY_OF_MONTH.range());//1 - 28/31
 ```
+## 필드의 값 변경하기
+```java
+//날짜 변경하기
+LocalDate now = LocalDate.now();
+now=now.with(ChronoField.DAY_OF_WEEK,4); //2022-10-20
+now=now.with(ChronoField.DAY_OF_YEAR,355); //2022-12-21
+//chronoField 상수값들이 들어온다.
+
+//날짜 더하기
+LocalDate nowPlus = LocalDate.now();
+nowPlus.plus(99,ChronoUnit.DAYS);//2023-01-26;
+//plus 매개변수로 Period,Duration
+//날짜를 더할때 ChronoUnit 상수를 가져온다.
+
+nowPlus.plus(5,ChronoUnit.MONTHS);//2023-06-26
+nowPlus.plus(5,ChronoUnit.CENTURIES);//2523-06-26
+
+//LocalDate에는 없고 LocalTime에만 존재하는것
+//trunatedTo(ChronoUnit.Hours) // 필드값보다 작은 단위를 0으로 초기화
+//Date에는 0으로 초기화 될수가 없기때문에 해당 매서드가 없다.
+LocalTime nowTime = LocalTime.now();
+//21:44:37 <변경전
+//09:44:17 <변경후 nowTime.plus(1,ChronoUnit);
+/*
+DAYS - 일
+Unit that represents the concept of a day.
+WEEKS - 주
+Unit that represents the concept of a week.
+MONTHS - 달
+Unit that represents the concept of a month.
+YEARS - 년
+Unit that represents the concept of a year.
+DECADES - 10년
+Unit that represents the concept of a decade.
+CENTURIES - 100년
+Unit that represents the concept of a century.
+----
+MILLIS - 천분의 일초
+Unit that represents the concept of a millisecond.
+SECONDS - 초
+Unit that represents the concept of a second.
+MINUTES - 분
+Unit that represents the concept of a minute.
+HOURS - 시간
+Unit that represents the concept of an hour.
+HALF_DAYS - 반나절
+Unit that represents the concept of half a day, as used in AM/PM.
+----
+ERAS - 10억년
+Unit that represents the concept of an era.
+FOREVER
+Artificial  unit that represents the concept of forever.
+MICROS
+Unit that represents the concept of a microsecond.
+MILLENNIA
+Unit that represents the concept of a millennium.
+NANOS
+Unit that represents the concept of a nanosecond, the smallest supported unit of time.
+*/
+```
+
+## 날짜와 시간의 비교
+```java
+LocalDate , LocalTime implements comparable를 구현하여
+값은 1,0,-1로 반환되어 비교한다.
+```
+### `isAfter(),isBefore,isEquals()`
+```java
+LocalDate now = LocalDate.now();//2022-10-19
+LocalDate nowPlus = now.plus(2,ChronoUnit.DAYS);//2022-10-21
+System.out.println(now.isAfter(nowPlus));//false
+System.out.println(now.isBefore(nowPlus));//true
+
+//isEqual() 존재 이유
+//일본력,서양력을 비교할경우
+LocalDate kDate = LocalDate.of(1999,4,15);//1999-04-15
+JapaneseDate jDate = JapaneseDate.of(1999,4,15);//Japanese Heisei 11-04-15
+System.out.println(kDate.equals(jDate));//false
+System.out.println(kDate.isEqual(jDate));//true;
+//필드값이 같아야하는 equals, 날짜만 비교 isEqual
+
+LocalTime time = LocalTime.now();//22:00:25.120665100
+LocalTime truncateTime = time.truncatedTo(ChronoUnit.HOURS);//22:00
+```
+
+## instant -> java.util.Date대체 1.8부터
+```java
+instant 에포크 타임(EPOCH TIME,1970-01-01 00:00:00 UTC)부터
+나초노 단위로 표현되어있다.
+날짜와 시간과는 다르게 단일 진법으로 이루져있어 계산이 빠르다.
+
+//객체 생성방법
+instant now = instant.now();
+instant another = instant.ofEpochSecond(A,B);
+A = now.getEpochSecond(),
+B = now.getNano(),
+A만 쓰거나 A,B를 둘다 사용하기도 한다.
+
+필드에 저장된 값을 가져올때
+long epochSec = now.getEpochSecond();
+int nano = now.getNano();
+
+instant는 시간을 초 단위와 나노초를 나누어 저장한다.
+Instant epoch = Instant.now();
+//		System.out.println(epoch);//2022-10-19T13:14:50.314431100Z
+long epochSec = epoch.getEpochSecond();
+int nano = epoch.getNano();
+//		System.out.println(epochSec); //1666185362
+//		System.out.println(nano); 	  //860661300
+
+OffsetTime off = OffsetTime.now(); // UTC
+System.out.println(off); //22:20:07.584048700+09:00
+LocalTime local = LocalTime.now(); // GMT
+System.out.println(local);
+
+//Date < == > Instant
+Date epochDate = Date.from(epoch);//Instant => Date
+Instant instantDate = epochDate.toInstant();//Date=> Instant
+```
